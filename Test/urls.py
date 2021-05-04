@@ -8,10 +8,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home),
     path('quize/',views.quize,name="quize"),
-    path('<str:compony_name>/',views.welcome),  
-    path('<str:compony_name>/<str:test_name>/quiz/',views.index),
-    path('<str:compony_name>/<str:test_name>/quiz/save_ans/',views.save_ans,name="saveans"),
-    path('<str:compony_name>/<str:test_name>/quiz/result/',views.result,name="result"),
+    path('company/<str:company_name>/',views.welcome),  
+    path('company/<str:company_name>/<str:test_name>/quiz/',views.index),
+    path('company/<str:company_name>/<str:test_name>/quiz/save_ans/',views.save_ans,name="saveans"),
+    path('company/<str:company_name>/<str:test_name>/quiz/result/',views.result,name="result"),
     path('accounts/', include('users.urls')),
-
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

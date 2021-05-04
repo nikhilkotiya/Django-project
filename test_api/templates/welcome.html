@@ -9,7 +9,7 @@
             width: 15%;
             height: 5%;
             background-color: rgb(243, 234, 234);
-            position: absolute;
+            position: relative;
             top:0;
             bottom: 0;
             left: 0;
@@ -19,12 +19,14 @@
             </style>
         </head>
         <body>
-            {% for i in t %}
-            <h1>Upcomming contest Or ongoing test</h1>
-            <a href="{{i.test_name}}/quiz/">Test Here</a>
-            {{i.test_name}}
-
-            {% endfor %}
-            <center><h1><a href="/quiz/">Start Quiz</a></h1></center>
+            {% if t %}
+                {% for i in t %}
+                <h1>Upcomming contest Or ongoing test</h1>
+                <a href="{{i.test_name}}/quiz/">Click here to start test</a>
+                {{i.test_name}}
+                {% endfor %}
+            {% else %}
+            <h2>No Quize Avilable</h2>
+            {% endif %}
         </body>
         </html>

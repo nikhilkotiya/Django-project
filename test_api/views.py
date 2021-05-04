@@ -1,18 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Quize,Save_test,Compony,Test_name
+from .models import Quize,Save_test,Company,Test_name
 from users.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-
-
 @csrf_exempt
-def index(request,test_name=None,compony_name=None):
+def index(request,test_name=None,company_name=None):
     if request.user.is_authenticated:
         id = User.objects.get(pk=request.user.id)
-        obj = Quize.objects.filter(compony_name__compony_name=compony_name,test_name__test_name=test_name)
-        count =Quize.objects.filter(compony_name__compony_name=compony_name,test_name__test_name=test_name).count()
+        obj = Quize.objects.filter(company_name__company_name=company_name,test_name__test_name=test_name)
+        count =Quize.objects.filter(company_name__company_name=company_name,test_name__test_name=test_name).count()
         paginator = Paginator(obj,1)
         try:
             page = int(request.GET.get('page','1'))  
@@ -29,39 +27,49 @@ def quize(request):
     x=Test_name.objects.all()
     return HttpResponse(x)
 lst = []
-def result(request,test_name=None,compony_name=None):
-    answers = Quize.objects.filter(compony_name__compony_name=compony_name,test_name__test_name=test_name)
-    print(answers)
+  
+def result(request,test_name=None,company_name=None):
+    answers = Quize.objects.filter(company_name__company_name=company_name,test_name__test_name=test_name)
     anslist = []
     for i in answers:
+        print("here")
         anslist.append(i.answer)
+        print("here2")
     score =0
+    print("here3")
     for i in range(len(lst)):
+        print("here4")
         if lst[i]==anslist[i]:
+            print("here5")
             score +=1
+            print("here6")
+    print("here7")  
+    lst.clear()
+    print("list clear")      
     u=User.objects.filter(email=request.user.email).first()
     print(score)
     s=score
     try:
         print("Name")
+        c=company_name
         print(test_name)
-        Save_test.objects.create(user_id=u,score=s,test_name=test_name)
+        Save_test.objects.create(user_id=u,score=s,test_name=test_name,company_name=c)
         print("no error")
     except:
         print("Error")
     return render(request,'result.html',{'score':score,'lst':lst})
-
 def home(request):
     return HttpResponse("this is the home page")
-
-def save_ans(request,test_name=None,compony_name=None):
+def save_ans(request,test_name=None,company_name=None):
     ans = request.GET['ans']
     lst.append(ans)
-def welcome(request,compony_name=None):
-    if compony_name!=None:
-        t=compony_name
-        #test=Compony.objects.filter(test__test_name=x)
-        test=Test_name.objects.filter(compony__compony_name=t)
+def welcome(request,company_name=None):
+    if company_name!=None:
+        t=company_name
+        print("welcome")
+        print(t)
+        #test=company.objects.filter(test__test_name=x)
+        test=Test_name.objects.filter(company__company_name=t)
         print(test)
         return render(request,'welcome.html',{'t':test})
     else:
