@@ -5,7 +5,36 @@ from users.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-@csrf_exempt
+from .forms import CompanyR,QuizeF
+
+def company(request):
+    if request.method=="POST":
+        form=CompanyR(request.POST)
+        print(form)
+        print("form")
+        if form.is_valid():
+            r="Registration done"
+            form.save()
+            return render(request,"company.html",{"r":r})
+        else:
+            return render(request,"company.html",{'form': form})
+    form = CompanyR()
+    return render(request,"company.html",{"form":form})
+
+def quizeF(request,company_name=None):
+    if company_name!=None:
+        if request.method=="POST":
+            form=QuizeF(request.POST)
+            if form.is_valid():
+                form.save()
+                return render(request,"quize.html")
+            return render(request,"quize.html",{'form': form})
+        
+        else:
+            form = QuizeF()
+        return render(request,"quize.html",{"form":form})
+    else:
+        return HttpResponse("Register Your Compony First")
 def index(request,test_name=None,company_name=None):
     if request.user.is_authenticated:
         id = User.objects.get(pk=request.user.id)
@@ -27,7 +56,6 @@ def quize(request):
     x=Test_name.objects.all()
     return HttpResponse(x)
 lst = []
-  
 def result(request,test_name=None,company_name=None):
     answers = Quize.objects.filter(company_name__company_name=company_name,test_name__test_name=test_name)
     anslist = []

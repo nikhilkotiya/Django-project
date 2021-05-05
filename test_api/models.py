@@ -1,8 +1,11 @@
 from django.db import models
 from users.models import User
-
+import uuid 
 class Company(models.Model):
-    company_name=models.CharField(max_length=50,null=True, blank=True)
+    company_name=models.CharField(max_length=50,null=True,unique=True,blank=True)
+    Tagline=models.TextField(null=True,blank=True)
+    website_url=models.URLField(max_length=200,blank=True,null=True)
+    Company_type=models.CharField(max_length=50,null=True,blank=True)
     def __str__(self):
         return self.company_name
 
