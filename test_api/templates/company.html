@@ -5,7 +5,10 @@
 {% else %}
 <form action = "" method = "POST"> 
     {% csrf_token %}
-    {{ form.as_p }}
+    <input type="text" name="name" placeholder="Company Name" required>
+    <input type="text" name="tagline" placeholder="Tagline" required>
+    <input type="text" name="type" placeholder="Type" required>
+    <input type="text" name="url" placeholder="Url" required>
     <input type = "submit" value = "Register"/>
 </form>
 {% endif %}

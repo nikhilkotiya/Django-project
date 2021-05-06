@@ -1,40 +1,80 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .models import Quize,Save_test,Company,Test_name
-from users.models import User
+from users.models import User,Profile
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from .forms import CompanyR,QuizeF
-
+from .forms import CompanyR,QuizeF,Test
+@csrf_exempt
 def company(request):
     if request.method=="POST":
-        form=CompanyR(request.POST)
-        print(form)
-        print("form")
-        if form.is_valid():
-            r="Registration done"
-            form.save()
-            return render(request,"company.html",{"r":r})
-        else:
-            return render(request,"company.html",{'form': form})
-    form = CompanyR()
-    return render(request,"company.html",{"form":form})
+        # form=CompanyR()
+        # form.company_name=request.POST["name"]
+        # form.tagline=request.POST["tagline"]
+        # form.website_url=request.POST["url"]
+        # form.user_id=User.objects.filter(email=request.user.email).first()
+        # form.company_type=request.POST["type"]
+        # if form.is_valid():
+        #     r="Registration done"
+        #     print("1")
+        #     form.save()
+        #     print("2")
+        c=request.POST["name"]
+        t=request.POST["tagline"]
+        u=request.POST["url"]
+        type=request.POST["type"]
+        user=User.objects.filter(email=request.user.email).first()
+        data=Profile.objects.filter(user_id=request.user.id).first()
+        data.company=request.POST["name"]
+        print(data.company)
+        data.save()
+        #print(user.email)
+        Company.objects.create(company_name=c,website_url=u,company_type=type,user_id=user,tagline=t)
+        r="done"
+        return render(request,"company.html")
+        # else:
+        #     print("error")
+        #     return render(request,"company.html")
+    return render(request,"company.html")
 
 def quizeF(request,company_name=None):
     if company_name!=None:
         if request.method=="POST":
-            form=QuizeF(request.POST)
-            if form.is_valid():
-                form.save()
-                return render(request,"quize.html")
-            return render(request,"quize.html",{'form': form})
-        
-        else:
-            form = QuizeF()
-        return render(request,"quize.html",{"form":form})
+            data = QuizeF()
+            data.comp__company_name=company_name
+            print(data.comp__company_name)
+            data.question=request.POST["question"]
+            data.option1=request.POST["option1"]
+            data.option2=request.POST["option2"]
+            data.option3=request.POST["option3"]
+            data.option4=request.POST["option4"]
+            data.answer=request.POST["answer"]
+            data.save()
+        return render(request,"quize.html")
     else:
         return HttpResponse("Register Your Compony First")
+
+
+@csrf_exempt
+def test_name(request):
+    if request.method=="POST":
+        data=Test()
+        data.test_name=request.POST["test"]
+        user=Profile.objects.filter(user_id=request.user.id).first()
+        data.company_name=user.company
+        print(data)
+        if data.is_valid():
+            data.save()
+            print("No error")
+        # data.company_name__company_name=u
+        # data.save()
+        # print(data)
+        #Test_name.objects.create(test_name=t,company__company_name=user.company) 
+        
+        return render(request,"test_register.html")
+    form=Test_name()
+    return render(request,"test_register.html",{"form":form})
 def index(request,test_name=None,company_name=None):
     if request.user.is_authenticated:
         id = User.objects.get(pk=request.user.id)
@@ -97,7 +137,7 @@ def welcome(request,company_name=None):
         print("welcome")
         print(t)
         #test=company.objects.filter(test__test_name=x)
-        test=Test_name.objects.filter(company__company_name=t)
+        test=Test_name.objects.filter(company_name__company_name=t)
         print(test)
         return render(request,'welcome.html',{'t':test})
     else:

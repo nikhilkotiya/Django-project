@@ -84,8 +84,7 @@ class Profile(models.Model):
     country = models.CharField(_('country'), max_length=100, null=True, blank=True)
     postal_code = models.CharField(_('postal code'), max_length=12, null=True, blank=True)
     profile_image = models.ImageField(_('profile image'), upload_to=f, null=True, blank=True)
-
-
+    company = models.CharField(_('company'), max_length=100, null=True, blank=True)    
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -94,6 +93,3 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
-
-
-
