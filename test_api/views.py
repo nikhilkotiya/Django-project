@@ -6,7 +6,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .forms import CompanyR,QuizeF,Test
-@csrf_exempt
 def company(request):
     if request.method=="POST":
         # form=CompanyR()
@@ -38,35 +37,42 @@ def company(request):
         #     return render(request,"company.html")
     return render(request,"company.html")
 
-def quizeF(request,company_name=None):
+def quizeF(request,company_name=None,test_name=None):
     if company_name!=None:
         if request.method=="POST":
-            data = QuizeF()
-            data.comp__company_name=company_name
-            print(data.comp__company_name)
-            data.question=request.POST["question"]
-            data.option1=request.POST["option1"]
-            data.option2=request.POST["option2"]
-            data.option3=request.POST["option3"]
-            data.option4=request.POST["option4"]
-            data.answer=request.POST["answer"]
-            data.save()
+            q=request.POST["question"]
+            o1=request.POST["option1"]
+            o2=request.POST["option2"]
+            o3=request.POST["option3"]
+            o4=request.POST["option4"]
+            a=request.POST["answer"]
+            x=company_name
+            print(x)
+            Quize.objects.create(company_name__company_name=x,question=q,option1=o1,option2=o2,option3=o3,option4=o4,answer=a)
+            print("No error")
+            #data = Quize()
+            #data.test_name__test_name=25
+            # data.comp__company_name=company_name
+            # data.question=request.POST["question"]
+            # data.option1=request.POST["option1"]
+            # data.option2=request.POST["option2"]
+            # data.option3=request.POST["option3"]
+            # data.option4=request.POST["option4"]
+            # data.answer=request.POST["answer"]
+            # data.save()
         return render(request,"quize.html")
     else:
         return HttpResponse("Register Your Compony First")
-
-
 @csrf_exempt
 def test_name(request):
     if request.method=="POST":
-        data=Test()
-        data.test_name=request.POST["test"]
+        t=request.POST["test"]
         user=Profile.objects.filter(user_id=request.user.id).first()
-        data.company_name=user.company
-        print(data)
-        if data.is_valid():
-            data.save()
-            print("No error")
+        print(user.company)
+        d=user.company
+        #data.company__company_name=user.company
+        Test_name.objects.create(test_name=t,company=d)
+        print("No error")
         # data.company_name__company_name=u
         # data.save()
         # print(data)
@@ -78,6 +84,7 @@ def test_name(request):
 def index(request,test_name=None,company_name=None):
     if request.user.is_authenticated:
         id = User.objects.get(pk=request.user.id)
+        print(test_name)
         obj = Quize.objects.filter(company_name__company_name=company_name,test_name__test_name=test_name)
         count =Quize.objects.filter(company_name__company_name=company_name,test_name__test_name=test_name).count()
         paginator = Paginator(obj,1)

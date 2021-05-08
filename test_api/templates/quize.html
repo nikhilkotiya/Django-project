@@ -2,6 +2,10 @@
 
 
 {% block content %}
+{% for i in x %}
+<h1>{{i.test_name}}</h1>
+{{i.company}}
+{% endfor %}
 <form action = "" method = "POST"> 
     {% csrf_token %}
     <input type="text" name="question" placeholder="Enter Question" required>
@@ -10,8 +14,13 @@
     <input type="text" name="option3" placeholder="Option 3" required>
     <input type="text" name="option4" placeholder="Option 4" required>
     <input type="text" name="answer" placeholder="Answer" required>
+    <input type="button" name="add" id="add" value="Add More">
     <input type = "submit" value = "Register"/>
 </form>
-
+<script>
+    // $("#id_username").change(function () {
+    //   console.log( $(this).val() );
+    // });
+  </script>
 
 {% endblock %}

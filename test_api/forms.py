@@ -21,12 +21,12 @@ class QuizeF(forms.ModelForm):
         model = Quize
         fields = "__all__"
 
+
 class Test(forms.Form):
     test_name=forms.CharField(max_length=30)
     company_name=forms.CharField(max_length=50)
-
     def clean_company_name(self):
         company_name=self.cleaned_data["company_name"]
         if company_name == None:
             raise forms.validationError("Not be empty")
-        return company_name
+        return company_name 

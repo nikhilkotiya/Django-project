@@ -12,10 +12,12 @@ class Company(models.Model):
 
 class Test_name(models.Model):
     test_name=models.CharField(max_length=50,null=True)
-    company_name = models.ForeignKey(Company, related_name='company',on_delete=models.CASCADE, null=True)
+    company= models.CharField(max_length=50,null=True)
+    def __str__(self):
+        return self.test_name
 
 class Quize(models.Model):
-    company_name = models.ForeignKey(Company,related_name='comp',null=True,on_delete=models.CASCADE)
+    company_name = models.ForeignKey(Company,null=True,on_delete=models.CASCADE)
     test_name= models.ForeignKey(Test_name,null=True,on_delete=models.CASCADE)
     question = models.TextField()
     option1 = models.CharField(max_length=100)
