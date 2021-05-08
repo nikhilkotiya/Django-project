@@ -46,9 +46,9 @@ def quizeF(request,company_name=None,test_name=None):
             o3=request.POST["option3"]
             o4=request.POST["option4"]
             a=request.POST["answer"]
-            x=company_name
-            print(x)
-            Quize.objects.create(company_name__company_name=x,question=q,option1=o1,option2=o2,option3=o3,option4=o4,answer=a)
+            t=Test_name.objects.get(test_name=test_name)
+            x=Company.objects.get(company_name=company_name)
+            Quize.objects.create(company=x,test=t,question=q,option1=o1,option2=o2,option3=o3,option4=o4,answer=a)
             print("No error")
             #data = Quize()
             #data.test_name__test_name=25
@@ -70,8 +70,9 @@ def test_name(request):
         user=Profile.objects.filter(user_id=request.user.id).first()
         print(user.company)
         d=user.company
+        x=Company.objects.get(company_name=d)
         #data.company__company_name=user.company
-        Test_name.objects.create(test_name=t,company=d)
+        Test_name.objects.create(test_name=t,company=x)
         print("No error")
         # data.company_name__company_name=u
         # data.save()
@@ -85,8 +86,8 @@ def index(request,test_name=None,company_name=None):
     if request.user.is_authenticated:
         id = User.objects.get(pk=request.user.id)
         print(test_name)
-        obj = Quize.objects.filter(company_name__company_name=company_name,test_name__test_name=test_name)
-        count =Quize.objects.filter(company_name__company_name=company_name,test_name__test_name=test_name).count()
+        obj = Quize.objects.filter(company__company_name=company_name,test__test_name=test_name)
+        count =Quize.objects.filter(company__company_name=company_name,test__test_name=test_name).count()
         paginator = Paginator(obj,1)
         try:
             page = int(request.GET.get('page','1'))  
@@ -104,31 +105,25 @@ def quize(request):
     return HttpResponse(x)
 lst = []
 def result(request,test_name=None,company_name=None):
-    answers = Quize.objects.filter(company_name__company_name=company_name,test_name__test_name=test_name)
+    answers = Quize.objects.filter(company__company_name=company_name,test__test_name=test_name)
     anslist = []
     for i in answers:
-        print("here")
         anslist.append(i.answer)
-        print("here2")
     score =0
-    print("here3")
     for i in range(len(lst)):
-        print("here4")
         if lst[i]==anslist[i]:
-            print("here5")
             score +=1
-            print("here6")
-    print("here7")  
     lst.clear()
-    print("list clear")      
     u=User.objects.filter(email=request.user.email).first()
+    print(u)      
     print(score)
     s=score
     try:
-        print("Name")
-        c=company_name
-        print(test_name)
-        Save_test.objects.create(user_id=u,score=s,test_name=test_name,company_name=c)
+        c=Company.objects.get(company_name=company_name)
+        print(c)
+        t=Test_name.objects.get(test_name=test_name)
+        print(t)
+        Save_test.objects.create(user_id=u,score=s,test=t,company=c)
         print("no error")
     except:
         print("Error")

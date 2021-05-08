@@ -6,14 +6,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.home),
-    path('quize/',views.quize,name="quize"),
-    path('company/new/setup/',views.company, name="company"),
-    #path('company/<str:company_name>/',views.welcome), 
-    path('company/<str:company_name>/<str:test_name>/add/quize/',views.quizeF),
-    path('company/add/test/',views.test_name),
-    path('company/<str:company_name>/<str:test_name>/quiz/',views.index),
-    path('company/<str:company_name>/<str:test_name>/quiz/save_ans/',views.save_ans,name="saveans"),
-    path('company/<str:company_name>/<str:test_name>/quiz/result/',views.result,name="result"),
+    path('',include('test_api.urls')),
     path('accounts/', include('users.urls')),
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
