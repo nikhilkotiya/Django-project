@@ -6,12 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body>
+<style>
+    main{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     
-    <h1>Home page</h1>
+    .post
+    {
+        width: 400px;
+        height: auto;
+        display: inline-block;
+       
+        border: 1px solid hsl(0, 0%, 0%);
+        
+        text-align: center;
+    }
+    h2{
+        font-size: 30px;
+    }
+    p{
+        font-size: 20px;
+        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif ;
+    }
+</style>
+<body>
+    <a href="{% url 'add-post' %}"><input type="button" value="Add Post"></a>
     {% for i in post %}
+    <main>
+    <div class="post">
     <h2>{{i.title}}</h2>
+    <hr>
     <P>{{i.description}}</P>
+      
+    {% if request.user == i.user %}
+
+    <a href="{% url 'edit' i.id %}"><input type="button" value="Edit"></a>
+    <form action="{% url 'delete' i.id %}" method="POST">
+        {% csrf_token %}
+        <input type="Submit" value="delete"></a>
+    </form>
+    </div>
+    {% endif %}
+    </main>
     {% endfor %}
 
 </body>
