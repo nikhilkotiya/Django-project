@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'test_api',
     'users',
     'blog',
+    'u_messages',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +122,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.User'
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR,'media') 
