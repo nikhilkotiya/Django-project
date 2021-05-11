@@ -79,6 +79,7 @@ class Profile(models.Model):
     birth_date = models.DateField(_('birth date'), null=True, blank=True)
     address = models.TextField(_('address'), max_length=150, null=True, blank=True)
     city = models.CharField(_('city'), max_length=100, null=True, blank=True)
+    username = models.CharField(_('username'), max_length=100, null=True, blank=True)
     district = models.CharField(_('district'), max_length=100, null=True, blank=True)
     state = models.CharField(_('state'), max_length=100, null=True, blank=True)
     country = models.CharField(_('country'), max_length=100, null=True, blank=True)
