@@ -3,15 +3,11 @@ from django.db import models
 from users.models import User
 from django.db.models import Max
 # Create your models here.
-
-
-
-
 class Message(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
 	sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user')
 	recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_user')
-	body = models.TextField(max_length=1000, blank=True, null=True)
+	body = models.TextField(max_length=1000)
 	date = models.DateTimeField(auto_now_add=True)
 	is_read = models.BooleanField(default=False)
 
@@ -42,5 +38,3 @@ class Message(models.Model):
 				'unread': Message.objects.filter(user=user, recipient__pk=message['recipient'], is_read=False).count()
 				})
 		return users
-
-        

@@ -9,4 +9,3 @@ class MessageForm(forms.ModelForm):
             'receiver',
             'message_file',
         ]
-        
