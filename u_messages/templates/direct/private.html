@@ -56,13 +56,9 @@
   </aside>
 <br>
 <!-- <a href="{% url 'usersearch' %}" class="button is-success">New message</a> -->
-
 </div>
-
 <div class="column">
-
 <div>
-
 {% for direct in directs %}
 <div class="box">
   <article class="media">
@@ -72,9 +68,9 @@
       <div class="content">
         <p>
           <!-- <h1>{{ direct.recipient.profile.username}}</h1> -->
-         <!-- <strong><small>{{ direct.date|date:'N d G:i'}}</small></strong> -->
         </p>
-        <h1>{{ direct.user.profile.username}} -  {{ direct.body }}</h1>
+        <h1>{{ direct.sender.email}} -  {{ direct.body }}</h1>
+        <strong><small>{{ direct.date|date:'N d G:i'}}</small></strong>
       </div>
     </div>
   </article>
