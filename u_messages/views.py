@@ -56,7 +56,6 @@ def UserSearch(request):
 @login_required
 def Directs(request, email):
 		from_user = request.user
-		print("1")
 		to_user_email = request.POST.get('to_user')
 		body = request.POST.get('body')
 		if request.method == 'POST':
@@ -66,14 +65,10 @@ def Directs(request, email):
 		user = request.user
 		messages = Message.get_messages(user=user)
 		active_direct = email
-		print(user)
-		print(email)
 		directs = Message.objects.filter(user=user, recipient__email=email)
-		print(directs)
 		e=request.user.email
 		o=User.objects.get(email=email)
 		other = Message.objects.filter(user=o, recipient__email=e)
-		print(other)
 		directs.update(is_read=True)
 		for message in messages:
 			if message['user'].email == email:
@@ -105,9 +100,7 @@ def NewConversation(request,email):
 @login_required
 def SendDirect(request,email):
 	if request.method=="POST":
-		print("1")
 		from_user = request.user
-		print("1")
 		to_user_email = request.POST.get('to_user')
 		body = request.POST.get('body')
 		if request.method == 'POST':
@@ -117,7 +110,6 @@ def SendDirect(request,email):
 		else:
 			HttpResponseBadRequest()
 def checkDirects(request):
-	print("2")
 	directs_count = 0
 	if request.user.is_authenticated:
 		directs_count = Message.objects.filter(user=request.user, is_read=False).count()
