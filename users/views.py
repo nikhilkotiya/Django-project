@@ -43,17 +43,10 @@ def is_active_check(user):
 @permission_required('users.view_user', raise_exception=True)
 def login_next(request):
     return HttpResponse("Hello, world. This is a log in page")
-
-
 class SignUpView(generic.CreateView):
     form_class = SignUpForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
-
-
-
-
-
 def create_message(sender, to, subject, message_text):
     """Create a message for an email.
   Args:
