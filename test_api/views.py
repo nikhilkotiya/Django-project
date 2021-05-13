@@ -128,8 +128,7 @@ def result(request,test_name=None,company_name=None):
     except:
         print("Error")
     return render(request,'result.html',{'score':score,'lst':lst})
-def home(request):
-    return HttpResponse("this is the home page")
+
 def save_ans(request,test_name=None,company_name=None):
     ans = request.GET['ans']
     lst.append(ans)

@@ -2,7 +2,7 @@ from django.urls import path, include
 import users
 from  .import views
 urlpatterns = [
-    path('',views.home),
+    # path('',views.home),
     path('quize/',views.quize,name="quize"),
     path('company/new/setup/',views.company, name="company"),
     #path('company/<str:company_name>/',views.welcome), 

@@ -7,6 +7,7 @@ from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from django.contrib.auth import logout as django_logout
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from django.contrib.auth.forms import PasswordResetForm
@@ -30,6 +31,8 @@ from google.oauth2 import service_account
 from  .forms import SignUpForm
 from .models import User
 
+def home(request):
+    return render(request,"landingPage.html")
 
 def is_active_check(user):
     return user.is_active
@@ -175,11 +178,11 @@ def login_view(request):
     else:
         return HttpResponse("You are not a user, Please signup for becoming a user.")
 
-
-def logout_view(request):
+@login_required
+def ulogout(request):
+    print("log out")
     logout(request)
-    return HttpResponse("Hello, world. This is a logout page")
-
+    return redirect('/')
 
 def email_check(user):
     return user.email.endswith('@gmail.com')
