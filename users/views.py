@@ -6,13 +6,15 @@ from email.mime.audio import MIMEAudio
 from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
+from django.contrib.auth.forms import PasswordResetForm
 from email.mime.text import MIMEText
 from django.contrib.auth import logout as django_logout
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate,logout
+from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
-from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail, BadHeaderError
+from django.contrib.auth.hashers import make_password, check_password
 from django.db.models.query_utils import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -27,10 +29,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google.oauth2 import service_account
-
 from  .forms import SignUpForm
 from .models import User
-
 def home(request):
     return render(request,"landingPage.html")
 
@@ -43,10 +43,10 @@ def is_active_check(user):
 @permission_required('users.view_user', raise_exception=True)
 def login_next(request):
     return HttpResponse("Hello, world. This is a log in page")
-class SignUpView(generic.CreateView):
-    form_class = SignUpForm
-    success_url = reverse_lazy('login')
-    template_name = 'registration/signup.html'
+# class SignUpView(generic.CreateView):
+#     form_class = SignUpForm
+#     success_url = reverse_lazy('login')
+#     template_name = 'registration/signup.html'
 def create_message(sender, to, subject, message_text):
     """Create a message for an email.
   Args:
@@ -179,3 +179,48 @@ def ulogout(request):
 
 def email_check(user):
     return user.email.endswith('@gmail.com')
+
+
+def signup(request):
+    if request.method=="POST":
+        if not User.objects.filter(email=request.POST["email"]).exists():
+            if request.POST["password"]==request.POST["rpassword"]:
+                if (len(request.POST["password"]) > 7):
+                    data=User()
+                    data.password=make_password(request.POST["password"])
+                    data.first_name=request.POST["first_name"]
+                    data.last_name=request.POST["last_name"]
+                    data.email = request.POST["email"]
+                    data.is_active = True
+                    print("user saved")
+                    data.save()
+                    return render(request,"login.html")
+                else:
+                    context="Length must be greter then 8"
+                    return render(request,"login.html",{'errorP':context})
+
+            else:
+                context="Password confirmation doesn't match"
+                print("wrong password")
+                return render(request,"login.html",{'errorPC':context})
+        else:
+            context="Email Already Exist"
+            return render(request,"login.html",{'errorE':context})             
+
+def login(request):
+    if request.method=="POST":
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request,email=email, password=password)
+        print(user)
+
+        if user is not None:
+            auth_login(request, user)
+            print('welcome')
+            return redirect('home')	
+        else:
+            print('wrong input ')
+            context="Wrong Email or Password"
+            return render(request,"login.html",{"invalid":context})
+    else:
+        return render(request,"login.html")
