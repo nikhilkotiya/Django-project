@@ -76,12 +76,14 @@ def test_name(request):
         print("No error")
         # data.company_name__company_name=u
         # data.save()
-        # print(data)
+        # print(data) 
         #Test_name.objects.create(test_name=t,company__company_name=user.company) 
         
         return render(request,"test_register.html")
     form=Test_name()
     return render(request,"test_register.html",{"form":form})
+
+
 def index(request,test_name=None,company_name=None):
     if request.user.is_authenticated:
         id = User.objects.get(pk=request.user.id)
@@ -100,10 +102,14 @@ def index(request,test_name=None,company_name=None):
         return render(request,'index.html',{'obj':obj,'questions':questions,'count':count,'id':id})
     else:
         return HttpResponse("Login First")
+
+
 def quize(request):
     x=Test_name.objects.all()
     return HttpResponse(x)
 lst = []
+
+
 def result(request,test_name=None,company_name=None):
     answers = Quize.objects.filter(company__company_name=company_name,test__test_name=test_name)
     anslist = []

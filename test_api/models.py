@@ -16,7 +16,7 @@ class Test_name(models.Model):
     def __str__(self):
         return self.test_name
 
-class Quize(models.Model):
+class Quize(models.Model): 
     company= models.ForeignKey(Company,null=True,on_delete=models.CASCADE)
     test = models.ForeignKey(Test_name,null=True,on_delete=models.CASCADE)
     question = models.TextField()

@@ -9,5 +9,7 @@ urlpatterns = [
     path('',include('test_api.urls')),
     path('', include('users.urls')),
     path('feed/',include('blog.urls')),
-    path('messages/',include('u_messages.urls'))
+    path('messages/',include('u_messages.urls')),
+    path('blogapi/',include('blogapi.urls')),
+    path('test_api/',include('test_android.urls')),
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

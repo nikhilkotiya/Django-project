@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'users',
     'blog',
     'u_messages',
+    'rest_framework',
+    'blogapi',
+    'test_android',
 ]
 
 MIDDLEWARE = [
